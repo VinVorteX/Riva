@@ -1,0 +1,58 @@
+{
+  "inauguration": {
+    "enabled": true,
+    "autoPlay": true,
+    "lines": [
+      {
+        "id": 1,
+        "text": "Good morning everyone! I am ELARA, your AI assistant, and I'm thrilled to welcome you to the NextGen Supercomputing Club inauguration!",
+        "pauseAfter": 25
+      },
+      {
+        "id": 2,
+        "text": "Our club is established with a vision to produce industry ready ML engineers from our college and to democratize artificial intelligence and make cutting-edge technology accessible to all students.",
+        "pauseAfter": 25
+      },
+      {
+        "id": 3,
+        "text": "Our primary objectives are: First, to provide hands-on experience with AI and machine learning technologies.",
+        "pauseAfter": 25
+      },
+      {
+        "id": 4,
+        "text": "Second, to foster innovation through collaborative projects and research.",
+        "pauseAfter": 25
+      },
+      {
+        "id": 5,
+        "text": "And third, to build a community of future AI leaders and innovators.",
+        "pauseAfter": 25
+      },
+      {
+        "id": 6,
+        "text": "Now, let me introduce our amazing team. Our President Shreya Jain, who leads with vision and dedication.",
+        "pauseAfter": 24
+      },
+      {
+        "id": 7,
+        "text": "Our Vice President Samarth Shukla, who ensures everything runs smoothly and coordinates our activities.",
+        "pauseAfter": 25
+      },
+      {
+        "id": 8,
+        "text": "And our talented team members who make everything possible with their skills and dedication.",
+        "pauseAfter": 25
+      },
+      {
+        "id": 9,
+        "text": "This lab is equipped with high-performance computing resources, GPUs for deep learning, and collaborative workspaces for innovation.",
+        "pauseAfter": 25
+      },
+      {
+        "id": 10,
+        "text": "That concludes our introduction. I'm now ready to answer any questions you may have about our club, AI technologies, or anything else! How may I assist you?",
+        "pauseAfter": 25
+      }
+    ]
+  }
+}

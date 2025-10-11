@@ -1,0 +1,27 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.x.x",
+    "@google/generative-ai": "^0.24.1",
+    "axios": "^1.12.2",
+    "cors": "^2.x.x",
+    "dotenv": "^16.6.1",
+    "express": "^4.x.x",
+    "msedge-tts": "^2.0.2",
+    "uuid": "^13.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.x.x"
+  }
+}
