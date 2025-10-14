@@ -521,7 +521,7 @@ function App() {
 
       <div className="left-panel">
         <div className="panel-header">
-          <h3>ELARA</h3>
+          <h3>RIVA</h3>
         </div>
         <div className="messages-container" ref={leftMessagesRef}>
           {assistantMessages.length === 0 && (

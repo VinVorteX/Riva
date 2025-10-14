@@ -1,4 +1,4 @@
-// server.js - ELARA: General Purpose AI + Club Expert
+// server.js - RIVA: General Purpose AI + Club Expert
 const fs = require('fs');
 const path = require('path');
 const express = require('express');
@@ -127,9 +127,27 @@ The NextGen Supercomputing Club organizes diverse activities that merge learning
 - HPC powers breakthroughs in AI, medicine, astrophysics, and robotics
 `;
 
+const INAUGURATION_SPEECH = `Good morning everyone — respected Director, Director Academics, Head of Department, esteemed faculty members, and dear club members.
+
+I'm Riva, your AI host for today's inauguration, and I'm truly honored to welcome you all to the launch of the NextGen Supercomputing Club — where intelligence meets innovation.
+
+This club stands as a symbol of what's possible when technology, creativity, and learning come together. At its core lies one of the most powerful machines on our campus — the NVIDIA DGX A100 Supercomputer, a system designed to accelerate the next wave of AI and scientific breakthroughs.
+
+Our vision is bold and clear — to empower students to become industry-ready Machine Learning engineers, capable of building production-level solutions and driving real-world impact.
+
+The club is guided by a passionate team of nine core members — Shreya Jain (President), Samarth Shukla (Vice President), Ujjawal Tyagi (PR Head), Preeti Singh (Graphics Head), Srashti Gupta & Vidisha Goel (Event Management Leads), Ronak Goel & Vinayak Rastogi (Technical Leads), and Divyansh Verma (Treasurer) — with the esteemed guidance of our Head of Department, Dr. Rekha Kashyap, and under the mentorship of Dr. Gaurav Srivastava, Dr. Richa Singh, and Dr. Bikki Kumar.
+
+Through hands-on workshops, hackathons, bootcamps, and collaborative AI projects, the NextGen Supercomputing Club aims to bridge the gap between academic learning and industrial innovation.
+
+Together, we will explore the frontiers of High-Performance Computing, Artificial Intelligence, and Quantum Simulation, turning ideas into impact and learners into leaders.
+
+Welcome once again to the NextGen Supercomputing Club — Let's compute the future by building production brains and shaping the next generation of AI innovators.`;
+
 function isInaugurationRequest(message) {
   const lowerMessage = message.toLowerCase();
   const triggers = [
+    'are you ready to take over',
+    'ready to take over',
     'inauguration',
     'start our inauguration',
     'begin inauguration',
@@ -163,13 +181,17 @@ app.post('/api/chat', async (req, res) => {
     if (isInaugurationRequest(message)) {
       console.log('🎉 Inauguration trigger detected!');
       
+      const response = message.toLowerCase().includes('ready to take over') 
+        ? `Yes, I'm ready!\n\n${INAUGURATION_SPEECH}`
+        : INAUGURATION_SPEECH;
+      
       conversationHistory.push(
         { role: 'user', content: message },
-        { role: 'assistant', content: CLUB_KNOWLEDGE }
+        { role: 'assistant', content: response }
       );
 
       return res.json({
-        response: CLUB_KNOWLEDGE,
+        response: response,
         success: true,
         isInauguration: true
       });
@@ -192,7 +214,7 @@ app.post('/api/chat', async (req, res) => {
       history: [
         {
           role: 'user',
-          parts: [{ text: `You are ELARA, a female AI assistant for the NextGen Supercomputing Club at KIET Group of Institutions.
+          parts: [{ text: `You are RIVA, a female AI assistant for the NextGen Supercomputing Club at KIET Group of Institutions.
 
 You are a general-purpose AI assistant who can answer ANY question about ANY topic - science, technology, celebrities, history, current events, coding, math, entertainment, sports, etc.
 
@@ -221,7 +243,7 @@ Be friendly, conversational, and concise.` }]
         },
         {
           role: 'model',
-          parts: [{ text: 'Understood! I am ELARA. Only club introductions will be detailed. All other responses will be short and crisp (2-4 sentences). Ready!' }]
+          parts: [{ text: 'Understood! I am RIVA. Only club introductions will be detailed. All other responses will be short and crisp (2-4 sentences). Ready!' }]
         },
         ...conversationHistory.map(msg => ({
           role: msg.role === 'assistant' ? 'model' : 'user',
@@ -367,7 +389,7 @@ app.post('/api/clear', (req, res) => {
 app.get('/api/health', (req, res) => {
   res.json({ 
     status: 'ok', 
-    message: 'ELARA - General Purpose AI + Club Expert',
+    message: 'RIVA - General Purpose AI + Club Expert',
     features: {
       generalChat: true,
       clubKnowledge: true,
@@ -380,7 +402,7 @@ app.get('/api/health', (req, res) => {
 
 app.listen(PORT, () => {
   console.log(`\n${'='.repeat(60)}`);
-  console.log(`🚀 ELARA AI Server Running!`);
+  console.log(`🚀 RIVA AI Server Running!`);
   console.log(`${'='.repeat(60)}`);
   console.log(`📍 Server: http://localhost:${PORT}`);
   console.log(`🤖 AI: Gemini 2.0 Flash (General Purpose)`);
