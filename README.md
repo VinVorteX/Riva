@@ -28,9 +28,46 @@
 
 ## 📦 Installation
 
-### Prerequisites
+### 🐳 Docker Setup (Recommended)
+
+**Quick Start:**
+```bash
+# Clone and setup
+git clone https://github.com/VinVorteX/Riva.git
+cd Riva
+
+# Setup environment
+make setup
+# Edit backend/.env with your API keys
+
+# Start RIVA
+make up
+```
+
+Open browser: **http://localhost:3000**
+
+**Development Mode (Hot Reload):**
+```bash
+make dev  # Start with hot reload
+```
+
+**Docker Commands:**
+```bash
+make help     # Show all commands
+make build    # Build images
+make logs     # Show logs
+make down     # Stop services
+make clean    # Clean everything
+```
+
+📖 **Full Docker Guide:** [DOCKER_SETUP.md](DOCKER_SETUP.md)
+
+### 🛠️ Manual Setup
+
+**Prerequisites:**
 - Node.js 16+
 - npm or yarn
+- Python 3.8+ (for face recognition)
 
 ### Backend Setup
 
@@ -100,20 +137,32 @@ npm start
 ## 🏗️ Project Structure
 
 ```
-Elara/
-├── backend/
-│   ├── server.js          # Main Express server
-│   ├── .env.example       # Environment template
-│   ├── .gitignore         # Git ignore rules
-│   └── package.json       # Backend dependencies
-├── frontend/
+Riva/
+├── backend/                    # Express server + Gemini AI
+│   ├── server.js              # Main server
+│   ├── Dockerfile             # Production build
+│   ├── Dockerfile.dev         # Development build
+│   ├── .env.example           # Environment template
+│   └── package.json           # Dependencies
+├── frontend/                   # React app
 │   ├── src/
-│   │   ├── App.js         # Main React component
-│   │   ├── App.css        # Styling
+│   │   ├── App.js             # Main chat interface
 │   │   └── components/
-│   │       └── AudioSphere.js  # 3D visualization
-│   └── package.json       # Frontend dependencies
-└── README.md              # This file
+│   │       ├── AudioSphere.js     # 3D visualization
+│   │       ├── AvatarRing.jsx     # 3D avatar ring
+│   │       └── VoiceAssistant.jsx # Voice interface
+│   ├── Dockerfile             # Production build
+│   ├── Dockerfile.dev         # Development build
+│   └── nginx.conf             # Nginx config
+├── Face-Recognition-using-Facenet/
+│   ├── Dockerfile             # Python service
+│   ├── enrollment_lite.py     # Face enrollment
+│   └── enroll_images/         # Face photos
+├── docker-compose.yml          # Production setup
+├── docker-compose.dev.yml      # Development setup
+├── Makefile                    # Easy commands
+├── DOCKER_SETUP.md             # Docker guide
+└── README.md                   # This file
 ```
 
 ## 🔧 Configuration

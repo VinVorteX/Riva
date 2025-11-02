@@ -420,55 +420,35 @@ app.post('/api/recognize-face', async (req, res) => {
       return res.status(400).json({ error: 'Image data required' });
     }
 
-    console.log('👤 Face recognition request received (mode:', useLite ? 'LITE' : 'FULL', ')');
+    console.log('👤 Face recognition request received');
 
-    // Use lite version for low-spec machines
-    const scriptName = useLite ? 'face_recognition_cli_lite.py' : 'face_recognition_cli.py';
-    
-    // Call Python face recognition service
-    const python = spawn('python3', [
-      path.join(__dirname, scriptName),
-      '--image', image
-    ]);
-
-    let result = '';
-    let error = '';
-
-    python.stdout.on('data', (data) => {
-      result += data.toString();
+    // Call face recognition service API
+    const response = await axios.post('http://face-recognition:8000/recognize', {
+      image: image
+    }, {
+      timeout: 10000
     });
 
-    python.stderr.on('data', (data) => {
-      error += data.toString();
-    });
-
-    python.on('close', (code) => {
-      if (code !== 0) {
-        console.error('❌ Face recognition error:', error);
-        return res.status(500).json({ 
-          success: false, 
-          message: 'Face recognition failed' 
-        });
-      }
-
-      try {
-        const recognition = JSON.parse(result);
-        console.log('✅ Face recognized:', recognition);
-        res.json(recognition);
-      } catch (e) {
-        console.error('❌ Parse error:', e);
-        res.status(500).json({ 
-          success: false, 
-          message: 'Invalid response from face recognition' 
-        });
-      }
+    console.log('✅ Face recognition response:', response.data);
+    res.json({
+      success: true,
+      name: response.data.name,
+      confidence: response.data.confidence
     });
 
   } catch (error) {
     console.error('❌ Face recognition error:', error.message);
+    
+    if (error.code === 'ECONNREFUSED') {
+      return res.status(503).json({ 
+        success: false, 
+        message: 'Face recognition service unavailable' 
+      });
+    }
+    
     res.status(500).json({ 
       success: false, 
-      message: error.message 
+      message: error.response?.data?.error || error.message 
     });
   }
 });

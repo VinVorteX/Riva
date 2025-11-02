@@ -1,0 +1,60 @@
+services:
+  # Development Backend with hot reload
+  backend-dev:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.dev
+    ports:
+      - "5000:5000"
+    environment:
+      - NODE_ENV=development
+      - PORT=5000
+    env_file:
+      - ./backend/.env
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+      - ./backend/uploads:/app/uploads
+      - face_db:/app/face_db
+    depends_on:
+      - face-recognition-dev
+    networks:
+      - riva-network
+
+  # Development Frontend with hot reload
+  frontend-dev:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.dev
+    ports:
+      - "3000:3000"
+    environment:
+      - REACT_APP_API_URL=http://localhost:5000
+      - CHOKIDAR_USEPOLLING=true
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    depends_on:
+      - backend-dev
+    networks:
+      - riva-network
+
+  # Development Face Recognition
+  face-recognition-dev:
+    build:
+      context: ./Face-Recognition-using-Facenet
+      dockerfile: Dockerfile
+    ports:
+      - "8001:8000"
+    volumes:
+      - ./Face-Recognition-using-Facenet:/app
+      - face_db:/app/face_db
+    networks:
+      - riva-network
+
+volumes:
+  face_db:
+
+networks:
+  riva-network:
+    driver: bridge
