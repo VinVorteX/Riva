@@ -5,6 +5,7 @@ import ReactMarkdown from 'react-markdown';
 import './App.css';
 import AudioSphere from './components/AudioSphere';
 import AvatarDemo from './components/AvatarDemo';
+import FaceRecognition from './components/FaceRecognition';
 
 // ICON COMPONENTS
 const RestartIcon = () => (
@@ -40,6 +41,12 @@ const SendIcon = () => (
 function App() {
   const [currentView, setCurrentView] = useState('chat'); // 'chat' or 'avatars'
   const [showInauguration, setShowInauguration] = useState(false);
+  const [showFaceRecognition, setShowFaceRecognition] = useState(false);
+  
+  // Debug state changes
+  useEffect(() => {
+    console.log('🎯 App state changed:', { showFaceRecognition, showInauguration });
+  }, [showFaceRecognition, showInauguration]);
   const [messages, setMessages] = useState([]);
   const [isListening, setIsListening] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
@@ -540,6 +547,20 @@ function App() {
     }
   };
 
+  // Show Face Recognition Mode
+  if (showFaceRecognition) {
+    console.log('🎯 Rendering FaceRecognition component');
+    return (
+      <FaceRecognition 
+        onComplete={() => {
+          console.log('🎯 Face recognition completed, switching to inauguration');
+          setShowFaceRecognition(false);
+          setShowInauguration(true);
+        }}
+      />
+    );
+  }
+
   // Show Inauguration Mode
   if (showInauguration) {
     return (
@@ -622,7 +643,10 @@ function App() {
         
         <button 
           className="control-btn avatar-btn"
-          onClick={() => setShowInauguration(true)}
+          onClick={() => {
+            console.log('🎯 Start Inauguration clicked - showing face recognition');
+            setShowFaceRecognition(true);
+          }}
           title="Start Inauguration"
           style={{ background: 'linear-gradient(135deg, #667eea, #764ba2)' }}
         >

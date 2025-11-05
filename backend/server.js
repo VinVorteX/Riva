@@ -414,8 +414,57 @@ app.post('/api/clear', (req, res) => {
 });
 
 // ===============================================
-// 🎭 FACE RECOGNITION ENDPOINT
+// 🎭 FACE RECOGNITION & GREETING ENDPOINTS
 // ===============================================
+
+// Dignitary recognition endpoint
+app.post('/api/recognize-dignitary', async (req, res) => {
+  try {
+    const { image } = req.body;
+    
+    if (!image) {
+      return res.status(400).json({ error: 'Image data required' });
+    }
+
+    console.log('🎯 Dignitary recognition request received');
+
+    // For production, this would call the Python face recognition service
+    // For now, simulate recognition with higher accuracy for dignitaries
+    const simulateRecognition = () => {
+      return new Promise(resolve => {
+        setTimeout(() => {
+          // Simulate dignitary detection (adjust probability as needed)
+          const shouldRecognize = Math.random() > 0.4; // 60% chance
+          if (shouldRecognize) {
+            const dignitaries = ['Gaurav', 'Richa', 'Rekha', 'Manoj', 'Adesh', 'Rajeev', 'Abhinav', 'Vinayak'];
+            const randomDignitary = dignitaries[Math.floor(Math.random() * dignitaries.length)];
+            const confidence = 85 + Math.random() * 10; // 85-95% confidence
+            resolve({ name: randomDignitary, confidence: Math.round(confidence) });
+          } else {
+            resolve({ name: null, confidence: 0 });
+          }
+        }, 300);
+      });
+    };
+
+    const result = await simulateRecognition();
+    
+    console.log('✅ Recognition result:', result);
+    res.json({
+      success: result.name !== null,
+      name: result.name,
+      confidence: result.confidence
+    });
+
+  } catch (error) {
+    console.error('❌ Recognition error:', error.message);
+    res.status(500).json({ 
+      success: false, 
+      message: error.message 
+    });
+  }
+});
+
 app.post('/api/recognize-face', async (req, res) => {
   try {
     const { image } = req.body;
@@ -454,6 +503,56 @@ app.post('/api/recognize-face', async (req, res) => {
 
   } catch (error) {
     console.error('❌ Face recognition error:', error.message);
+    res.status(500).json({ 
+      success: false, 
+      message: error.message 
+    });
+  }
+});
+
+// ===============================================
+// 🎤 DIGNITARY GREETING ENDPOINT
+// ===============================================
+app.post('/api/greet', async (req, res) => {
+  try {
+    const { dignitary } = req.body;
+    
+    if (!dignitary) {
+      return res.status(400).json({ error: 'Dignitary name required' });
+    }
+
+    console.log(`🎤 Greeting request for: ${dignitary}`);
+
+    // Generate personalized greeting using Gemini
+    const model = genAI.getGenerativeModel({ 
+      model: 'gemini-2.0-flash-exp',
+      generationConfig: {
+        temperature: 0.8,
+        maxOutputTokens: 200,
+      },
+    });
+
+    const greetingPrompt = `Generate a warm, respectful greeting for ${dignitary} who has just arrived at the NextGen Supercomputing Club event. Keep it brief (2-3 sentences), professional, and welcoming. Mention their role if it's clear from their name/title.`;
+
+    const result = await model.generateContent(greetingPrompt);
+    const greeting = result.response.text();
+
+    console.log(`✅ Generated greeting: ${greeting}`);
+
+    // Add to conversation history for context
+    conversationHistory.push(
+      { role: 'system', content: `Greeted ${dignitary}` },
+      { role: 'assistant', content: greeting }
+    );
+
+    res.json({
+      success: true,
+      greeting: greeting,
+      dignitary: dignitary
+    });
+
+  } catch (error) {
+    console.error('❌ Greeting generation error:', error.message);
     res.status(500).json({ 
       success: false, 
       message: error.message 
