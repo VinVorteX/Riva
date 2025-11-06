@@ -28,7 +28,59 @@
 
 ## 📦 Installation
 
-### 🐳 Docker Setup (Recommended)
+### 🪟 Windows Quick Start (Recommended)
+
+**Prerequisites:**
+- Node.js 16+ → https://nodejs.org/
+- Git with Git LFS → https://git-lfs.github.com/
+
+**Quick Setup:**
+```cmd
+# Clone repository
+git clone https://github.com/VinVorteX/Riva.git
+cd Riva
+
+# Run automatic setup
+WINDOWS_QUICK_START.bat
+
+# Add API key in: Riva-2\Riva-main\backend\.env
+# GEMINI_API_KEY=your_key_here
+
+# Start application
+START_RIVA.bat
+```
+
+Open browser: **http://localhost:3000**
+
+📖 **Full Windows Guide:** [WINDOWS_README.txt](WINDOWS_README.txt)
+
+---
+
+### 🐧 Linux/Mac Setup
+
+**Prerequisites:**
+- Node.js 16+
+- Git with Git LFS
+- npm or yarn
+
+**Quick Setup:**
+```bash
+# Clone repository
+git clone https://github.com/VinVorteX/Riva.git
+cd Riva
+
+# Install Git LFS (if not installed)
+sudo dnf install git-lfs  # Fedora
+sudo apt install git-lfs  # Ubuntu
+brew install git-lfs      # macOS
+
+# Setup Git LFS
+./setup-git-lfs.sh
+```
+
+---
+
+### 🐳 Docker Setup
 
 **Quick Start:**
 ```bash
@@ -44,13 +96,6 @@ make setup
 make up
 ```
 
-Open browser: **http://localhost:3000**
-
-**Development Mode (Hot Reload):**
-```bash
-make dev  # Start with hot reload
-```
-
 **Docker Commands:**
 ```bash
 make help     # Show all commands
@@ -62,28 +107,27 @@ make clean    # Clean everything
 
 📖 **Full Docker Guide:** [DOCKER_SETUP.md](DOCKER_SETUP.md)
 
+---
+
 ### 🛠️ Manual Setup
 
 **Prerequisites:**
 - Node.js 16+
 - npm or yarn
+- Git LFS (for video files)
 - Python 3.8+ (for face recognition)
 
-### Backend Setup
+### Backend Setup (Riva-2)
 
 ```bash
-cd backend
+cd Riva-2/Riva-main/backend
 npm install
 ```
 
-Create `.env` file (copy from `.env.example`):
+Create `.env` file:
 ```env
 GEMINI_API_KEY=your_gemini_api_key
-OPENAI_API_KEY=your_openai_api_key
-ELEVENLABS_API_KEY=your_elevenlabs_api_key
-ELEVENLABS_VOICE_ID=your_voice_id
-USE_ELEVENLABS=false
-USE_WHISPER=false
+PORT=5001
 ```
 
 Start backend:
@@ -91,13 +135,23 @@ Start backend:
 node server.js
 ```
 
-### Frontend Setup
+### Frontend Setup (Riva-2)
 
 ```bash
-cd frontend
+cd Riva-2/Riva-main/frontend
 npm install
 npm start
 ```
+
+### Video Files (Git LFS)
+
+Large video files are stored using Git LFS:
+- `sphere-animation.mp4` (158 MB)
+- `trial.mp4` (86 MB)
+- `background_3.mp4` (69 MB)
+- And more...
+
+They will automatically download when you clone the repository if Git LFS is installed.
 
 ## 🎯 Usage
 
@@ -138,45 +192,51 @@ npm start
 
 ```
 Riva/
-├── backend/                    # Express server + Gemini AI
-│   ├── server.js              # Main server
-│   ├── Dockerfile             # Production build
-│   ├── Dockerfile.dev         # Development build
-│   ├── .env.example           # Environment template
-│   └── package.json           # Dependencies
-├── frontend/                   # React app
-│   ├── src/
-│   │   ├── App.js             # Main chat interface
-│   │   └── components/
-│   │       ├── AudioSphere.js     # 3D visualization
-│   │       ├── AvatarRing.jsx     # 3D avatar ring
-│   │       └── VoiceAssistant.jsx # Voice interface
-│   ├── Dockerfile             # Production build
-│   ├── Dockerfile.dev         # Development build
-│   └── nginx.conf             # Nginx config
-├── Face-Recognition-using-Facenet/
-│   ├── Dockerfile             # Python service
-│   ├── enrollment_lite.py     # Face enrollment
-│   └── enroll_images/         # Face photos
-├── docker-compose.yml          # Production setup
-├── docker-compose.dev.yml      # Development setup
-├── Makefile                    # Easy commands
-├── DOCKER_SETUP.md             # Docker guide
-└── README.md                   # This file
+├── Riva-2/                         # Main Application
+│   └── Riva-main/
+│       ├── backend/                # Backend Server (Port 5001)
+│       │   ├── server.js          # Gemini 2.5 Flash API
+│       │   └── .env               # API keys
+│       └── frontend/               # React Frontend (Port 3000)
+│           ├── src/
+│           │   ├── App.js         # Main app
+│           │   └── components/
+│           │       ├── Showcase.jsx       # Inauguration ceremony
+│           │       ├── FaceCard.jsx       # Speaker cards
+│           │       ├── RivaChatbot.jsx    # Q&A chatbot
+│           │       └── AudioSphere.js     # Video visualization
+│           └── public/
+│               └── *.mp4          # Video files (Git LFS)
+├── NextGen-FaceRecognition/        # Face recognition system
+│   ├── enrollment_lite.py         # Face enrollment
+│   └── dataset/                   # Face photos
+├── WINDOWS_QUICK_START.bat         # Windows setup script
+├── START_RIVA.bat                  # Windows start script
+├── WINDOWS_README.txt              # Windows guide
+├── setup-git-lfs.sh                # Linux/Mac Git LFS setup
+├── setup-git-lfs.bat               # Windows Git LFS setup
+└── README.md                       # This file
 ```
 
 ## 🔧 Configuration
 
-### Backend Settings
-- `PORT`: Server port (default: 5000)
-- `USE_ELEVENLABS`: Enable ElevenLabs TTS (default: false)
-- `USE_WHISPER`: Enable OpenAI Whisper STT (default: false)
+### Backend Settings (Riva-2/Riva-main/backend/.env)
+```env
+GEMINI_API_KEY=your_key_here
+PORT=5001
+```
 
-### Frontend Settings
-- Continuous mode delay: 2000ms
-- Audio level smoothing: 0.15
-- Sphere expansion: 30% max
-- Voice language: en-IN (Indian English)
+### Frontend Features
+- **Inauguration Mode**: 4 speaker ceremony with face recognition
+- **Q&A Chatbot**: Continuous listening with AudioSphere
+- **Voice**: Female voice (en-IN) with pitch 1.1-1.2
+- **Auto-transition**: Ceremony → Chatbot after speeches
+
+### Git LFS Configuration
+- Storage: 1 GB free tier
+- Bandwidth: 1 GB/month
+- Tracked files: `*.mp4` (except intro.mp4, rotate.mp4)
+- Total video size: ~372 MB
 
 ## 🎓 About NextGen Supercomputing Club
 
